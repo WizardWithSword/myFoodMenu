@@ -3,11 +3,8 @@ const app = getApp()
 
 Page({
   data: {
-    avatarUrl: '',
     userInfo: {},
-    logged: false,
-    takeSession: false,
-    requestResult: ''
+    search: '',
   },
 
   onLoad: function() {
@@ -110,5 +107,31 @@ Page({
       }
     })
   },
+
+  inputKeywords (e) {
+    this.setData({
+      search: e.detail.value
+    })
+  },
+  goSearch () {
+    if (this.data.search == '') {
+      wx.showToast({
+        icon: 'none',
+        title: '请输入3个食材，以顿号或空格隔开'
+      })
+    }
+  },
+  getRandom () {
+    wx.showToast({
+      icon: 'none',
+      title: '菜单丰富中...暂时不能随机推荐一道菜哦',
+      duration: 2000
+    })
+  },
+  addFood () {
+    wx.navigateTo({
+      url: '/pages/add/index',
+    })
+  }
 
 })
