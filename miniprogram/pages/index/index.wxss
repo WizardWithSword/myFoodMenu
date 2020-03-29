@@ -49,3 +49,28 @@ page{
   width: 100%;
   padding: 0 40rpx;
 }
+
+.one-food{
+  border-bottom: 1rpx solid #ccc;
+  margin-top: 30rpx;
+  font-size: 26rpx;
+}
+.h2{
+  font-size: 36rpx;
+  font-weight: 600;
+  margin-bottom: 15rpx;
+}
+.author{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 10rpx;
+}
+.header{
+  width: 32rpx;
+  height: 32rpx;
+  border-radius: 32rpx;
+}
+.sub,.detail{
+  margin-bottom: 10rpx;
+}

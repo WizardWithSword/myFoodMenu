@@ -1,2 +1,37 @@
 <!--miniprogram/pages/add/index.wxml-->
-<text>miniprogram/pages/add/index.wxml</text>
+<view class="container">
+  <view class="tips">说明：录入的菜谱可以帮助其他小伙伴在不知道做什么菜的时候给出建议哦</view>
+  <view class="one-prop">
+    <view>菜名：</view>
+    <input bindinput="inputAttr" data-key="name" type="text" placeholder="输入菜名" maxlength="30">{{name}}</input>
+  </view>
+
+  <view class="one-prop">
+    <view>主要食材：</view>
+    <input bindinput="inputAttr" data-key="searchStr" type="text" placeholder="请输入主要食材，顿号隔开，用于搜索。如：番茄、鸡蛋" maxlength="120"></input>
+  </view>
+  <!-- <view class="one-prop">
+    <view>食材照片：</view>
+    <button>点击上传照片</button>
+  </view> -->
+  <view class="one-prop">
+    <view>所有食材：</view>
+    <textarea bindinput="inputAttr" data-key="resource" class="h100" placeholder="请输入全部食材，以及用量。如：1、番茄1个；2、鸡蛋2个；3、盐少许" maxlength="512"></textarea>
+  </view>
+  <view class="one-prop">
+    <view>制作步骤：</view>
+    <textarea bindinput="inputAttr" data-key="step" placeholder="请输入菜的制作步骤。如：第一步：切番茄。第二步：打碎鸡蛋，搅拌均匀。" maxlength="1024"></textarea>
+  </view>
+  <view class="one-prop">
+    <view>贡献者：</view>
+    <view wx:if="{{nickName}}" class="flex"><image class="header" src="{{avatarUrl}}"></image> {{nickName}}  </view>
+    <view wx:else class="flex">
+      <text>匿名或授权使用微信昵称头像</text>
+      <button size="mini" class="btn-inline" open-type="getUserInfo" bindgetuserinfo="getUserInfo">点击授权</button>
+    </view>
+  </view>
+  <view class="one-prop mt30">
+    <button bindtap="save" type="primary">保存</button>
+  </view>
+
+</view>

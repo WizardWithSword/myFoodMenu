@@ -1,11 +1,19 @@
 // miniprogram/pages/add/index.js
+import {Api} from '../../api/api.js'
+
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-
+    anonymous: true,
+    name: '',
+    resource: '',
+    searchStr: '',
+    step: '',
+    nickName: '',
+    avatarUrl: '',
   },
 
   /**
@@ -13,6 +21,51 @@ Page({
    */
   onLoad: function (options) {
 
+  },
+  getUserInfo: function (e) {
+    let { nickName, avatarUrl} = e.detail.userInfo
+    this.setData({
+      anonymous: false,
+      nickName: nickName,
+      avatarUrl: avatarUrl
+    })
+  },
+  save () {
+    let obj = {}
+    obj.name = this.data.name
+    obj.makeSteps = this.data.step
+    obj.searchs = this.data.searchStr.split('、')
+    obj.resource = this.data.resource // 所有食材
+    // obj.img = this.data.img
+    if (this.data.anonymous === false) {
+      obj.userNick = this.data.nickName
+      obj.userHeader = this.data.avatarUrl
+      obj.userId = wx.getStorageSync('openid') || ''
+    }
+    wx.showLoading()
+    Api.addFood(obj).then(res => {
+      console.log('res', res)
+      wx.hideLoading()
+      if (res._id) {
+        wx.showModal({
+          title: '贡献成功',
+          content: '感谢分享，其他用户搜索时会看到你的贡献哦。',
+          showCancel: false,
+          success: (res) => {
+            if (res.confirm) {
+              wx.navigateBack()
+            }
+          }
+        })
+      }
+    })
+  },
+  inputAttr (e) {
+    let key = e.currentTarget.dataset.key
+    let val = e.detail.value
+    this.setData({
+      [key]: val
+    })
   },
 
   /**

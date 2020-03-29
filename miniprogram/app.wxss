@@ -5,3 +5,4 @@ view{
 page{
   background-color: #f1f1f1;
 }
+.mt30{margin-top: 30rpx;}

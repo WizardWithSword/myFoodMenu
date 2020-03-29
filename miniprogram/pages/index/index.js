@@ -1,30 +1,32 @@
 //index.js
+import { Api } from '../../api/api.js'
 const app = getApp()
 
 Page({
   data: {
     userInfo: {},
     search: '',
+    searchResult: [],
   },
 
   onLoad: function() {
-
-    // 获取用户信息
-    wx.getSetting({
-      success: res => {
-        if (res.authSetting['scope.userInfo']) {
-          // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
-          wx.getUserInfo({
-            success: res => {
-              this.setData({
-                avatarUrl: res.userInfo.avatarUrl,
-                userInfo: res.userInfo
-              })
-            }
-          })
-        }
-      }
-    })
+    this.onGetOpenid()
+    // // 获取用户信息
+    // wx.getSetting({
+    //   success: res => {
+    //     if (res.authSetting['scope.userInfo']) {
+    //       // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
+    //       wx.getUserInfo({
+    //         success: res => {
+    //           this.setData({
+    //             avatarUrl: res.userInfo.avatarUrl,
+    //             userInfo: res.userInfo
+    //           })
+    //         }
+    //       })
+    //     }
+    //   }
+    // })
   },
 
   onGetUserInfo: function(e) {
@@ -43,17 +45,12 @@ Page({
       name: 'login',
       data: {},
       success: res => {
-        console.log('[云函数] [login] user openid: ', res.result.openid)
+        console.log('[云函数] [login] user openid: ', res, res.result.openid)
         app.globalData.openid = res.result.openid
-        wx.navigateTo({
-          url: '../userConsole/userConsole',
-        })
+        wx.setStorageSync('openid', res.result.openid)
       },
       fail: err => {
         console.error('[云函数] [login] 调用失败', err)
-        wx.navigateTo({
-          url: '../deployFunctions/deployFunctions',
-        })
       }
     })
   },
@@ -117,9 +114,36 @@ Page({
     if (this.data.search == '') {
       wx.showToast({
         icon: 'none',
-        title: '请输入3个食材，以顿号或空格隔开'
+        title: '请输入3个食材，多个食材间以顿号或空格隔开'
+      })
+    } else {
+      this.recordSearch()
+      let obj = {}
+      obj.searchArr = this.data.search.split('、')
+      Api.search(obj).then(res => {
+        console.log('res', res)
+        if (res.data && res.data.length > 0) {
+          this.setData({
+            searchResult: res.data
+          })
+        } else {
+          this.setData({
+            searchResult: []
+          })
+          wx.showModal({
+            title: '暂时没有相关菜谱',
+            showCancel: false,
+            content: '开动脑筋,自由发挥吧。最后别忘了分享菜谱给其他小伙伴哦',
+          })
+        }
       })
     }
+  },
+  recordSearch () {
+    let obj = {}
+    obj.str = this.data.search
+    obj.uid = wx.getStorageSync('openid')
+    Api.recordSearch(obj)
   },
   getRandom () {
     wx.showToast({

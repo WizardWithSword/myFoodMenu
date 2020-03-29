@@ -9,12 +9,14 @@
     <view bindtap="addFood">贡献菜谱</view>
     <view bindtap="getRandom">手气不错</view>
   </view>
-  <view class="res">
-    <view>搜索结果:</view>
-    <view class="one-food">
-      <view class="h2">名字</view>
-      <view class="sub">所有食材</view>
-      <view class="detail">做法</view>
+  <view class="res mt30" wx:if="{{searchResult.length > 0}}">
+    <view>搜索结果（{{searchResult.length}}个）:</view>
+    <view class="one-food" wx:for="{{searchResult}}" wx:key="_id">
+      <view class="h2">·{{item.name}}</view>
+      <view class="author" wx:if="{{item.userNick}}">贡献者： <image class="header" src="{{item.userHeader}}"></image> {{item.userNick}}</view>
+      <view class="author" wx:else>贡献者： 匿名</view>
+      <view class="sub">所有食材：{{item.resource}}</view>
+      <view class="detail">具体做法: {{item.makeSteps}}</view>
     </view>
   </view>
 </view>
