@@ -8,6 +8,19 @@ Page({
     search: '',
     searchResult: [],
   },
+  onShareAppMessage: function (res) {
+    return {
+      title: '我的冰箱原来能做这！',
+      path: 'pages/index/index'
+    }
+  },
+  onShareTimeline () {
+    return {
+      title: '我的冰箱原来能做这！',
+      imageUrl: '/images/timeline-share.jpg',
+      query: 'clickfrom=timeline'
+    }
+  },
 
   onLoad: function() {
     this.onGetOpenid()
